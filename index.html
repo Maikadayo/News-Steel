@@ -84,7 +84,7 @@
 
     newsArticles.forEach(article => {
       const marker = new mapboxgl.Marker()
-        .setLng neededLat(article.location)
+        .setLngLat(article.location)
         .addTo(map);
 
       const popupContent = `
