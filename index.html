@@ -11,7 +11,6 @@
     #container { display: flex; flex: 1; }
     #news-list { width: 33.33%; padding: 10px; box-sizing: border-box; overflow-y: auto; background-color: #f9f9f9; }
     #map { flex: 1; height: 100%; }
-    #news-content { width: 33.33%; padding: 10px; box-sizing: border-box; overflow-y: auto; background-color: #ffffff; }
     .news-item { margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; background-color: #fff; cursor: pointer; }
     .news-item:hover { background-color: #eee; }
     .detail-link { color: blue; cursor: pointer; text-decoration: underline; }
@@ -19,14 +18,12 @@
     @media (max-width: 767px) {
       #news-list { width: 100%; max-width: none; }
       #map { width: 100%; }
-      #news-content { width: 100%; max-width: none; }
     }
   </style>
 </head>
 <body>
   <div id="container">
     <div id="news-list"></div>
-    <div id="news-content"></div>
     <div id="map"></div>
   </div>
   <!-- Include the Mapbox GL JS -->
@@ -63,7 +60,6 @@
     ];
 
     const newsList = document.getElementById('news-list');
-    const newsContent = document.getElementById('news-content');
     let spinEnabled = true;
 
     newsArticles.forEach(article => {
@@ -77,9 +73,12 @@
           essential: true
         });
 
-        newsContent.innerHTML = `<h2>${article.title}</h2><p>${article.content}</p><span class="detail-link" data-location='${JSON.stringify(article.location)}'>Detail</span>`;
+        // Display the content below the clicked news item
+        const contentDiv = document.createElement('div');
+        contentDiv.innerHTML = `<p>${article.content}</p><span class="detail-link" data-location='${JSON.stringify(article.location)}'>Detail</span>`;
+        newsItem.appendChild(contentDiv);
 
-        const detailLink = newsContent.querySelector('.detail-link');
+        const detailLink = contentDiv.querySelector('.detail-link');
         detailLink.addEventListener('click', () => {
           map.flyTo({
             center: article.location,
