@@ -19,8 +19,8 @@
     @media (max-width: 767px) {
       #container { flex-direction: column; }
       #news-list { width: 100%; max-width: none; }
-      #map { width: 100%; height: 300px; }
-      #news-content { width: 100%; max-width: none; display: block; }
+      #map { width: 100%; height: 50vh; }
+      #news-content { width: 100%; max-width: none; display: block; height: 50vh; overflow-y: scroll; }
     }
   </style>
 </head>
@@ -66,6 +66,7 @@
     const newsList = document.getElementById('news-list');
     const newsContent = document.getElementById('news-content');
     let spinEnabled = true;
+    let activeContentDiv = null;
 
     newsArticles.forEach(article => {
       const newsItem = document.createElement('div');
@@ -83,10 +84,16 @@
           essential: true
         });
 
+        // Hide the previously active content
+        if (activeContentDiv && activeContentDiv !== contentDiv) {
+          activeContentDiv.style.display = 'none';
+        }
+
         // Toggle content display
         contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
         newsContent.innerHTML = contentDiv.innerHTML;
         newsContent.style.display = 'block';
+        activeContentDiv = contentDiv;
 
         const detailLink = newsContent.querySelector('.detail-link');
         detailLink.addEventListener('click', (e) => {
