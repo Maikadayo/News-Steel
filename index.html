@@ -11,18 +11,22 @@
     #container { display: flex; flex: 1; }
     #news-list { width: 33.33%; padding: 10px; box-sizing: border-box; overflow-y: auto; background-color: #f9f9f9; }
     #map { flex: 1; height: 100%; }
+    #news-content { width: 33.33%; padding: 10px; box-sizing: border-box; overflow-y: auto; background-color: #ffffff; }
     .news-item { margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; background-color: #fff; cursor: pointer; }
     .news-item:hover { background-color: #eee; }
+    .detail-link { color: blue; cursor: pointer; text-decoration: underline; }
 
     @media (max-width: 767px) {
       #news-list { width: 100%; max-width: none; }
       #map { width: 100%; }
+      #news-content { width: 100%; max-width: none; }
     }
   </style>
 </head>
 <body>
   <div id="container">
     <div id="news-list"></div>
+    <div id="news-content"></div>
     <div id="map"></div>
   </div>
   <!-- Include the Mapbox GL JS -->
@@ -59,6 +63,7 @@
     ];
 
     const newsList = document.getElementById('news-list');
+    const newsContent = document.getElementById('news-content');
     let spinEnabled = true;
 
     newsArticles.forEach(article => {
@@ -68,35 +73,24 @@
       newsItem.addEventListener('click', () => {
         map.flyTo({
           center: article.location,
-          zoom: 15, // Set zoom level to maximum
+          zoom: 10, // Initial zoom level
           essential: true
         });
 
-        new mapboxgl.Popup()
-          .setLngLat(article.location)
-          .setHTML(`<strong>Title:</strong> ${article.title}<br><strong>Date:</strong> ${article.date}<br><p>${article.content}</p>`)
-          .addTo(map);
+        newsContent.innerHTML = `<h2>${article.title}</h2><p>${article.content}</p><span class="detail-link" data-location='${JSON.stringify(article.location)}'>Detail</span>`;
+
+        const detailLink = newsContent.querySelector('.detail-link');
+        detailLink.addEventListener('click', () => {
+          map.flyTo({
+            center: article.location,
+            zoom: 15, // Maximum zoom level
+            essential: true
+          });
+        });
 
         spinEnabled = false; // Stop spinning when an article is selected
       });
       newsList.appendChild(newsItem);
-    });
-
-    newsArticles.forEach(article => {
-      const marker = new mapboxgl.Marker()
-        .setLngLat(article.location)
-        .addTo(map);
-
-      const popupContent = `
-        <strong>Title:</strong> ${article.title}<br>
-        <strong>Date:</strong> ${article.date}<br>
-        <p>${article.content}</p>
-      `;
-      
-      const popup = new mapboxgl.Popup({ offset: 25 })
-        .setHTML(popupContent);
-
-      marker.setPopup(popup);
     });
 
     // Globe spinning logic
