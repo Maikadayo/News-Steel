@@ -7,11 +7,15 @@
   <!-- Include the Mapbox GL CSS -->
   <link href='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css' rel='stylesheet' />
   <style>
-    body, html { height: 100%; margin: 0; padding: 0; }
-    #map { height: 100%; }
+    body, html { height: 100%; margin: 0; padding: 0; display: flex; }
+    #news-list { width: 33.33%; padding: 10px; box-sizing: border-box; overflow-y: auto; background-color: #f9f9f9; }
+    #map { width: 66.67%; height: 100%; }
+    .news-item { margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; background-color: #fff; cursor: pointer; }
+    .news-item:hover { background-color: #eee; }
   </style>
 </head>
 <body>
+  <div id="news-list"></div>
   <div id="map"></div>
   <!-- Include the Mapbox GL JS -->
   <script src='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js'></script>
@@ -19,191 +23,48 @@
     mapboxgl.accessToken = 'pk.eyJ1IjoiaGFydWNoYW5uIiwiYSI6ImNsdnFlZWRidTAyNmkya21yem1wMjhzZHUifQ.GrEXJlVvv0ljdkQXoEQTTQ';
     const map = new mapboxgl.Map({
       container: 'map', // container ID
-      style:  'mapbox://styles/haruchann/clvqqksup01r901qpg3d0hynv',  // style URL
+      style: 'mapbox://styles/haruchann/clvqqksup01r901qpg3d0hynv', // style URL
       center: [31.261181743597245,30.033253480264698], // initial center coordinates
       zoom: 1.9, // initial zoom
       pitch: 0, // pitch in degrees
       bearing: 0 // bearing in degrees
     });
 
-
     map.addControl(new mapboxgl.NavigationControl());
-
     map.on('style.load', () => {
         map.setFog({}); // Set the default atmosphere style
     });
 
-  const newsArticles = [
-    {
+    const newsArticles = [
+      {
         title: "Vietnam targets higher steel output, lower emissions",
         date: "05/13/2024",
         content: "Vietnam could produce 51 million tonnes of crude steel in 2050, Vietnam Steel Association (VSA) secretary general and vice chairman Dinh Quoc Thai said at Monday’s South East Asian Iron and Steel Institute (Seaisi) annual conference.",
         location: [105.8148158587074,21.01580842214596]
       },
       {
-        title: "Iron ore gains, China to issue long-term bonds",
-        date: "05/13/2024",
-        content: "Vietnam could produce 51 million tonnes of crude steel in 2050, Vietnam Steel Association (VSA) secretary general and vice chairman Dinh Quoc Thai said at Monday’s South East Asian Iron and Steel Institute (Seaisi) annual conference.",
-        location: [105.8148158587074,21.01580842214596]
-      },
-      {
-        title: "US scrap market settles sideways to down",
-        date: "05/13/2024",
-        content: "The US scrap market has seen soft sideways price movement during May trading.Prime grades remained unchanged in both the Midwest and Southeast, while cut grades decreased by $10-20/gross ton from April values, depending on the region.",
-        location: [-77.03686560471895,38.90720717557834]
-      },
-  {
-        title: "ASEAN steel industry needs support to decarbonise: SEAISI",
-        date: "05/13/2024",
-        content: "According to a draft published by the China Metallurgical Information and Standards Institute (CMISI) on the Metal Standardization Internet, the new scrap steel import standards will allow the import of mixed materials and lower import inspection standards. The standard could be updated in 2024.",
-        location: [101.54129602845805,3.0710757570531833]
-      },
-  {
-        title: "China allows mixed scrap imports",
-        date: "05/15/2024",
-        content: "According to a draft published by the China Metallurgical Information and Standards Institute (CMISI) on the Metal Standardization Internet, the new scrap steel import standards will allow the import of mixed materials and lower import inspection standards. The standard could be updated in 2024.",
-        location: [116.41061059593407,39.920189550996156]
-      },
-      {
-        title: "US construction input prices rise, but steel declines",
-        date: "05/15/2024",
-        content: "While overall US construction input prices rose in April, steel-related construction prices were down.",
-        location: [ -77.01245991016924,38.89543686486421]
-      },
-    {
-        title: "AISI urges passage of carbon emissions data law",
-        date: "05/15/2024",
-        content: "A piece of bipartisan carbon emissions data legislation in the US known as the Prove It Act would benefit domestic steel producers, American Iron and Steel Institute (AISI) president Kevin Dempsey states during a press conference",
-        location: [-77.01052487757234,38.89858961826898]
-      },
-    {
-        title: "Biden administration confirms China 25% steel tariff",
-        date: "05/15/2024",
-        content: "The Biden administration confirms it will increase the tariff rate on certain China-origin steel and aluminium products under Section 301 from 0-7.5% to 25% in 2024. ",
-        location: [ -77.03630890455877,38.897935019175975,]
-      },
-        {
-        title: "SAIL BSP to install multiple solar energy plants",
-        date: "05/15/2024",
-        content: "Steel Authority of India (SAIL)’s Bhilai Steel Plant (BSP) plans to install several solar power generation systems on its plant premises, township and reservoir, in order to reduce emissions and boost environmental conservation. ",
-        location: [77.23695159911787, 28.592106610003423]
-      },
-     {
-        title: "Feralpi Germany to launch coiled rebar in 2025",
-        date: "05/15/2024",
-        content: "Feralpi Stahl expects to complete its major modernisation by year-end, when it will start operation of a new spooler facility, for the market introduction of what it says is emission-free rebar.  ",
-        location: [13.285341386598537,51.31296464668997]
-      },
-      {
-        title: "Italian stainless scrap values hike",
-        date: "05/15/2024",
-        content: "Italian stainless steel scrap prices are increasing this month by €30/tonne ($32) on short availability and see-sawing raw materials. ",
-        location: [9.222494780538968,45.46933072792991]
-      },
-          {
-        title: "The first Chinese steel investment in Saudi Arabia, Bunyan Steel, is due to start production in the fourth quarter. ",
-        date: "05/17/2024",
-        content: "Bunyan Steel's Saudi subsidiary eyes October plant commissioning ",
-        location: [ 55.64243003724774,25.32974870392751]
-      },
-     {
-        title: "Steel associations oppose US legislation supporting timber usage",
-        date: "05/20/2024",
-        content: "The American Iron and Steel Institute (AISI), Steel Manufacturers Association (SMA), and American Institute of Steel Construction (AISC) are openly opposing US legislation that would encourage more usage of timber in federal construction projects.",
-        location: [-77.01000989346376, 38.89855621902578]
-      },
- {
-        title: "Carbon capture trial begins at ArcelorMittal Belgium",
-        date: "05/21/2024",
-        content: "ArcelorMittal Gent has started operating a pilot carbon capture unit on its blast furnace off-gas in conjunction with Mitsubishi Heavy Industries (MHI), BHP, and Mitsubishi Development .",
-        location: [4.408690661942482,50.4629726280116]
-      },
- {
-        title: "Red October eyes increasing equipment productivity",
-        date: "05/21/2024",
-        content: "Russia’s Krasny Oktyabr (Red October) stainless steel plant has put into operation a modern high-frequency hardening unit (ZVU) in the metallurgical equipment repair shop (CRMO).",
-        location: [ 44.56363064097861,48.75936026529404]
-      },
- {
-        title: "GCC HRC market falls silent",
-        date: "05/22/2024",
-        content: "The hot rolled coil market in the Gulf Cooperation Council has fallen silent as most buyers have enough stocks in the United Arab Emirates.",
-        location: [ 44.56363064097861,48.75936026529404]
-      },
-     {
-        title: "Kametstal improves efficiency with converter repairs",
-        date: "05/21/2024",
-        content: "Metinvest’s Kametstal steelworks is carrying out large-scale repairs of converter No.1 at the converter shop.",
-        location: [34.61404043364757,48.52725764285906]
-      },
-        {
-        title: "Tata Steel secures Port Talbot EAF power supply",
-        date: "05/21/2024",
-        content: "Tata Steel has signed a connection offer with the Electricity System Operator (ESO) for Port Talbot, which involves National Grid building new electrical infrastructure.",
-        location: [4.613702489473906,52.54252166975554]
-      },
-     {
-        title: "Zhonghuan, SIRC sign scrap treatment project in Saudi",
-        date: "05/21/2024",
-        content: "China's Sino Carneutec – also known as Zhonghuan International Group (Hong Kong) Limited – signed last week a cooperation agreement on industrial waste treatment with the Saudi Investment Recycling Company (SIRC), a wholly owned subsidiary of the Saudi Public Investment Fund (PIF).",
-        location: [121.59564727428096,38.89246585050546]
-      },
-     {
-        title: "Process automation brings MMK significant economic impact",
-        date: "05/21/2024",
-        content: "The total economic effect from the introduction of robotic process automation at Russia’s MMK in recent years has amounted to RUB 660 million ($7.2m), the company tells.",
-        location: [ 59.05257505872116,53.41925800683736,]
-      },
-        {
-        title: "Mingfu Steel hot tests new production facilities",
-        date: "05/21/2024",
-        content: "China’s Shanxi Mingfu Iron & Steel has successfully hot tested new production facilities at its capacity replacement project, according to the project contractor, Shanghai Baoye Group under China MCC.",
-        location: [ 111.012979992318,35.6556099537036]
-      },
-    {
-        title: "Duferco invests in Sicilian plant",
-        date: "05/21/2024",
-        content: "Italian sections producer Duferco is investing €95 million ($103m) in the industrial reconversion of its Sicilian facility in Giammoro, Sicily.",
-        location: [4.401852373013573,50.894466313594926]
-      },
-     {
-        title: "Baowu signs with AMI to secure coking coal",
-        date: "05/21/2024",
-        content: "Baosteel Resources Singapore has signed a cooperation agreement with Indonesia's largest coking coal miner, Adaro Minerals Indonesia (AMI), for 2024-2025 to secure ultra-low ash and low phosphorus coking coal resources.",
-        location: [103.85851665184556,1.295728694457206]
-      },
-     {
-        title: "India's Goa approves low-grade iron ore dumps exports",
-        date: "05/21/2024",
-        content: "The Goa government has recently granted approvals to nine mining companies to handle and export low-grade iron ore dumps.",
-        location: [73.82515550367485,15.495626217730248]
-      },
-     {
-        title: "Malaysia’s car production falls on-month in April",
-        date: "05/21/2024",
-        content: "Malaysia’s car production fell 14.98% to 56,895 units in April, from 66,923 units in March, in line with lower monthly car sales.",
-        location: [101.57663782116784,3.120001216729638]
-      },
-    {
-        title: "MinRes's Onslow Iron delivers first ore to Baowu",
-        date: "05/20/2024",
-        content: "Mineral Resources' (MinRes) Onslow Iron project has delivered its first ore on ship ahead of schedule for delivery to China Baowu Steel Group, the world’s largest steelmaker.",
-        location: [115.80826279503731,-31.909368800610594]
-      },
-      {
-        title: "Commerce modifies AD finding on Thai-produced PC strand",
-        date: "05/20/2024",
-        content: "The US Department of Commerce has published the final results of antidumping duty administrative review on imports of pre-stressed concrete (PC) steel wire strand from Thailand.",
-        location: [-104.68166123517426,41.13510522188671, ]
-      },
-        {
-        title: "Tata posts record production, deliveries in FY24",
-        date: "05/31/2024",
-        content: "Tata Steel has achieved its highest ever Indian steel production, increasing by 4.5% year-on-year to 20.78 million tonnes in the fiscal year ending March 2024.",
-        location: [72.83266122638688,18.93166311135452]
-      },
+        title: "ArcelorMittal Restocking Outlook",
+        date: "05/03/2024",
+        content: "ArcelorMittal observes a waiting period for a rebound in restocking. Sentiment stabilizes, awaiting consumption increase due to low inventory levels. Maintains global steel demand growth forecast for 2024. Q1 shows declines in production, shipments, net profit, and Ebitda, but revenue grows compared to Q4 2023. European steel spreads improve, US prices stabilize influenced by low inventory. Challenges noted from China’s excess steel production and rising exports. Focus on upcoming projects for low-emission steel supply.",
+        location: [6.143465193777926,49.62180385642374]
+      }
     ];
 
+    const newsList = document.getElementById('news-list');
+
+    newsArticles.forEach(article => {
+      const newsItem = document.createElement('div');
+      newsItem.className = 'news-item';
+      newsItem.innerText = article.title;
+      newsItem.addEventListener('click', () => {
+        map.flyTo({
+          center: article.location,
+          zoom: 10,
+          essential: true
+        });
+      });
+      newsList.appendChild(newsItem);
+    });
 
     newsArticles.forEach(article => {
       const marker = new mapboxgl.Marker()
