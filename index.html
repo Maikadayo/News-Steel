@@ -56,7 +56,7 @@
       cursor: pointer; 
       text-decoration: underline; 
     }
-    #news-content { 
+    .news-content { 
       display: none; 
       padding: 10px; 
       box-sizing: border-box; 
@@ -76,13 +76,6 @@
         width: 100%; 
         height: 50vh; 
       }
-      #news-content { 
-        width: 100%; 
-        max-width: none; 
-        display: block; 
-        height: 50vh; 
-        overflow-y: scroll; 
-      }
     }
   </style>
 </head>
@@ -91,7 +84,6 @@
   <div id="container">
     <div id="news-list"></div>
     <div id="map"></div>
-    <div id="news-content"></div>
   </div>
   <!-- Include the Mapbox GL JS -->
   <script src='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js'></script>
@@ -127,7 +119,6 @@
     ];
 
     const newsList = document.getElementById('news-list');
-    const newsContent = document.getElementById('news-content');
     let spinEnabled = true;
     let activeContentDiv = null;
 
@@ -137,7 +128,7 @@
       newsItem.innerText = article.title;
 
       const contentDiv = document.createElement('div');
-      contentDiv.style.display = 'none'; // Initially hide the content
+      contentDiv.className = 'news-content';
       contentDiv.innerHTML = `<p>${article.content}</p><span class="detail-link" data-location='${JSON.stringify(article.location)}'>Detail</span>`;
 
       newsItem.addEventListener('click', () => {
@@ -154,11 +145,9 @@
 
         // Toggle content display
         contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
-        newsContent.innerHTML = contentDiv.innerHTML;
-        newsContent.style.display = 'block';
         activeContentDiv = contentDiv;
 
-        const detailLink = newsContent.querySelector('.detail-link');
+        const detailLink = contentDiv.querySelector('.detail-link');
         detailLink.addEventListener('click', (e) => {
           e.stopPropagation(); // Prevent triggering the parent click event
           map.flyTo({
