@@ -66,6 +66,11 @@
       const newsItem = document.createElement('div');
       newsItem.className = 'news-item';
       newsItem.innerText = article.title;
+
+      const contentDiv = document.createElement('div');
+      contentDiv.style.display = 'none'; // Initially hide the content
+      contentDiv.innerHTML = `<p>${article.content}</p><span class="detail-link" data-location='${JSON.stringify(article.location)}'>Detail</span>`;
+
       newsItem.addEventListener('click', () => {
         map.flyTo({
           center: article.location,
@@ -73,13 +78,12 @@
           essential: true
         });
 
-        // Display the content below the clicked news item
-        const contentDiv = document.createElement('div');
-        contentDiv.innerHTML = `<p>${article.content}</p><span class="detail-link" data-location='${JSON.stringify(article.location)}'>Detail</span>`;
-        newsItem.appendChild(contentDiv);
+        // Toggle content display
+        contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
 
         const detailLink = contentDiv.querySelector('.detail-link');
-        detailLink.addEventListener('click', () => {
+        detailLink.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent triggering the parent click event
           map.flyTo({
             center: article.location,
             zoom: 15, // Maximum zoom level
@@ -89,6 +93,8 @@
 
         spinEnabled = false; // Stop spinning when an article is selected
       });
+
+      newsItem.appendChild(contentDiv);
       newsList.appendChild(newsItem);
     });
 
