@@ -13,7 +13,6 @@
     #map { flex: 1; height: 100%; }
     .news-item { margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; background-color: #fff; cursor: pointer; }
     .news-item:hover { background-color: #eee; }
-    #news-content { padding: 10px; }
 
     @media (max-width: 767px) {
       #news-list { width: 100%; max-width: none; }
@@ -26,7 +25,6 @@
     <div id="news-list"></div>
     <div id="map"></div>
   </div>
-  <div id="news-content"></div>
   <!-- Include the Mapbox GL JS -->
   <script src='https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js'></script>
   <script>
@@ -61,7 +59,6 @@
     ];
 
     const newsList = document.getElementById('news-list');
-    const newsContent = document.getElementById('news-content');
     let spinEnabled = true;
 
     newsArticles.forEach(article => {
@@ -71,18 +68,23 @@
       newsItem.addEventListener('click', () => {
         map.flyTo({
           center: article.location,
-          zoom: 10,
+          zoom: 15, // Set zoom level to maximum
           essential: true
         });
+
+        new mapboxgl.Popup()
+          .setLngLat(article.location)
+          .setHTML(`<strong>Title:</strong> ${article.title}<br><strong>Date:</strong> ${article.date}<br><p>${article.content}</p>`)
+          .addTo(map);
+
         spinEnabled = false; // Stop spinning when an article is selected
-        newsContent.innerHTML = `<h2>${article.title}</h2><p>${article.content}</p>`;
       });
       newsList.appendChild(newsItem);
     });
 
     newsArticles.forEach(article => {
       const marker = new mapboxgl.Marker()
-        .setLngLat(article.location)
+        .setLng neededLat(article.location)
         .addTo(map);
 
       const popupContent = `
